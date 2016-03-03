@@ -16,4 +16,9 @@ table相关的操作函数都是以luaH开头，推测H应该是Hashtable的意�
       GCObject* gclist;           //指向所在的gc队列
       int sizearray;              //数组长度
     }Table;
-其中CommonHeader和gclist主要是跟GC工作相关。
+其中CommonHeader和gclist主要是跟GC工作相关。根据注释描述，Lua table采用的是chained scatter table和Brent's变种的混合技术。Google了一下chained scatter table，其主要特点是：
+
+- table由一个数组构成，数组的每个元素包含key和一个指针（数组下标）；
+- 当发生冲突时，元素插入到数组中尚未被占用的位置，元素中的指针来构造冲突链表；
+
+Brent's是一种二次hash的方案，在遇到冲突时，不断加上另一个Hash函数的hash结果，直到找到空位为止。
